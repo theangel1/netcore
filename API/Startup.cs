@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using API.Mappings;
 using Application.Contracts;
@@ -15,6 +17,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Persistence;
+using Persistence.DapperConnection;
 
 namespace API
 {
@@ -30,9 +33,15 @@ namespace API
         
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(o => o.AddPolicy("corsApp", builder => {
+                builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+            }));
+
             services.AddDbContext<ApplicationDbContext>(opt => {
                 opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
+
+            services.Configure<ConexionConfiguracion>(Configuration.GetSection("ConnectionStrings"));
 
             //Servicio de automapper
             services.AddAutoMapper(typeof(Maps));
@@ -40,15 +49,22 @@ namespace API
             services.AddSwaggerGen(c => {
                 c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
                 {
-                    Title = "Api prueba Angel",
+                    Title = "API net core Maqueta Lider",
                     Version = "v1",
-                    Description = "Api de prueba en la que demuestro las capas y forma de trabajo"
+                    Description = "Se desarrolla API en base a requerimientos. Falta implementar logicas de negocios. Se mantiene en espera el tema."
                 });
+                var xfile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xpath = Path.Combine(AppContext.BaseDirectory, xfile);
+                //la ruta del xml está en el archivo de configuracion del proyecto. (csproj)
+                //Se debe setear segun el entorno local correspondiente
+                c.IncludeXmlComments(xpath);
             });
             
             //Agrego servicios del proyecto Application->Contracts
             services.AddSingleton<ILoggerService, LoggerService>();
+            services.AddTransient<IFactoryConnection, FactoryConnection>();
             services.AddScoped<ICargoRepository, CargoRepository>();
+            services.AddScoped<IColaboradorRepository, ColaboradorRepository>();
             
             services.AddControllers();
         }
@@ -56,6 +72,7 @@ namespace API
         
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseCors("corsApp");
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

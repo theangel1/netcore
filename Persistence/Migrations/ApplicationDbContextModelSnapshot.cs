@@ -29,12 +29,72 @@ namespace Persistence.Migrations
                     b.Property<string>("Descripcion")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime?>("FechaCreacion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("FechaModificacion")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Nombre")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.ToTable("Cargo");
+                });
+
+            modelBuilder.Entity("Domain.Colaborador", b =>
+                {
+                    b.Property<string>("Rut")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ApellidoMat")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ApellidoPat")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("CargoId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ContactoEmerg")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DV")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Direccion")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EmailCorp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("FechaCreacion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("FechaModificacion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Fono")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FonoCorp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FotoUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Nombres")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Rut");
+
+                    b.HasIndex("CargoId");
+
+                    b.ToTable("Colaborador");
                 });
 
             modelBuilder.Entity("Domain.Usuario", b =>
@@ -78,9 +138,6 @@ namespace Persistence.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
-
-                    b.Property<string>("Rut")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
@@ -234,6 +291,13 @@ namespace Persistence.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("Domain.Colaborador", b =>
+                {
+                    b.HasOne("Domain.Cargo", "Cargo")
+                        .WithMany()
+                        .HasForeignKey("CargoId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

@@ -7,10 +7,15 @@ namespace Persistence
 {
     public class ApplicationDbContext : IdentityDbContext<Usuario>
     {
-        public ApplicationDbContext(DbContextOptions options) : base(options) {
+        public ApplicationDbContext(DbContextOptions options) : base(options)
+        {
         }
 
-        public DbSet<Cargo> Cargo{get;set;}
+        public DbSet<Cargo> Cargo { get; set; }
+        public DbSet<Colaborador> Colaborador { get; set; }
+
+      
+       
 
     }
 }

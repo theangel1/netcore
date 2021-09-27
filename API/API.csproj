@@ -2,6 +2,12 @@
   <ItemGroup>
     <ProjectReference Include="..\application\Application.csproj"/>
   </ItemGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>Q:\ProyectoLider\netcore\API\bin\Debug\netcoreapp3.1\API.xml</DocumentationFile>
+    <NoWarn>1591</NoWarn>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="10.1.1"/>
     <PackageReference Include="NLog" Version="4.7.11"/>
